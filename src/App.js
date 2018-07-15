@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import web3 from './web3';
 import lottery from './lottery';
@@ -8,7 +7,9 @@ class App extends Component {
   state = {
     manager: '',
     players: [],
-    balance: ''
+    balance: '',
+    value: '',
+    message: ''
   };
 
   async componentDidMount() {
@@ -25,6 +26,26 @@ class App extends Component {
     this.setState({manager, players, balance});
   }
 
+  onSubmit = async (event) => {
+    //prevent default
+    event.preventDefault();
+
+    //get list of accounts available
+    const accounts = await web3.eth.getAccounts();
+
+    //set state
+    this.setState({message: 'Waiting for transaction to confirm...'})
+
+    //enter into lottery
+    await lottery.methods.enter().send({
+      from: accounts[0],
+      value: web3.utils.toWei(this.state.value, 'ether')
+    });
+
+    this.setState({message: 'You have been entered into the lottery. Good luck!'})
+    this.setState(this.state);
+  };
+
   render() {
     return (
       <div>
@@ -34,6 +55,21 @@ class App extends Component {
         There are currently {this.state.players.length} players in this round. <br></br><br></br>
       Lottery pot: {web3.utils.fromWei(this.state.balance, 'ether')} ETH
         </p>
+        <hr />
+      <form onSubmit={this.onSubmit}>
+          <h4>Want to try your luck?</h4>
+          <div>
+            <label>Amount of ETH to enter:</label>
+            <input
+              value={this.state.value}
+              onChange={event => this.setState({value:event.target.value})}
+            />
+          </div>
+          <button>Submit</button>
+        </form>
+
+        <hr />
+        <h1>{this.state.message}</h1>
       </div>
     );
   }
