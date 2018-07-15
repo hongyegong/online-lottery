@@ -5,7 +5,6 @@ import web3 from './web3';
 
 class App extends Component {
   render() {
-    console.log(web3.version);
     return (
       <div className="App">
         <header className="App-header">
