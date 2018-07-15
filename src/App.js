@@ -46,6 +46,20 @@ class App extends Component {
     this.setState(this.state);
   };
 
+  onClick = async () => {
+    //get list of usable accounts in metamask
+    const accounts = await web3.eth.getAccounts();
+
+    this.setState({message: 'Waiting for transaction to confirm...'})
+
+    //pick winner
+    await lottery.methods.pickWinner().send({
+      from: accounts[0]
+    });
+
+    this.setState({message: 'Round ended, and winner drawn!'});
+  };
+
   render() {
     return (
       <div>
@@ -67,7 +81,11 @@ class App extends Component {
           </div>
           <button>Submit</button>
         </form>
-
+        <br></br><br></br>
+        <hr />
+        <h4>Ready to pick a winner?</h4>
+        <button onClick={this.onClick}>End round!</button>
+        <br></br><br></br>
         <hr />
         <h1>{this.state.message}</h1>
       </div>
