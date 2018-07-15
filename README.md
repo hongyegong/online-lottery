@@ -9,7 +9,7 @@ A react web-app frontend for an Ethereum lottery, integrated w/ smart contracts.
 npm run deploy
 ```  
 4. Check your console/terminal, and take note of two items. It will say "contract deployed to xxx" and also there will be some json known as the interface.  
-5. Now in this React project (lottery-react), navigate to `lottery.js` and paste the address into `address` variable, and paste that json into `abi` variable.  
+5. Now in this React project (lottery-react), open up `src/lottery.js` and paste the address into `address` variable, and paste that json into `abi` variable.  
 6. Start the web app:  
 ```
 npm run start
