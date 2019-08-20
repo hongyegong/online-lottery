@@ -36,9 +36,14 @@ class App extends Component {
     //set state
     this.setState({message: 'Waiting for transaction to confirm...'})
 
+	await window.ethereum.enable().then((account) =>{
+		const defaultAccount = account[0]
+		web3.eth.defaultAccount = defaultAccount
+    })
+
     //enter into lottery
     await lottery.methods.enter().send({
-      from: accounts[0],
+      from: web3.eth.defaultAccount,
       value: web3.utils.toWei(this.state.value, 'ether')
     });
 
@@ -52,9 +57,13 @@ class App extends Component {
 
     this.setState({message: 'Waiting for transaction to confirm...'})
 
+	await window.ethereum.enable().then((account) =>{
+		const defaultAccount = account[0]
+		web3.eth.defaultAccount = defaultAccount
+    })
     //pick winner
     await lottery.methods.pickWinner().send({
-      from: accounts[0]
+      from: web3.eth.defaultAccount
     });
 
     this.setState({message: 'Round ended, and winner drawn!'});
